@@ -15,8 +15,13 @@ router.post("/", async (req: MessagingRequest, res: Response<string>) => {
     // const reply = await getReply(userMessage, req.body.From);
     // const reply = { text: "sample text reponse to sms text"};
     const reply = await getPurchaseReply(userMessage, req.body.From);
-    console.log("msg from custom text", req.body.From, req.body.To, req.body.Body)
-    response.message(reply.text);
+
+    if (reply.text == "NO RESPONSE"){
+      //do nothing by sending an empty reponse back to twillio
+    }else{
+      console.log("msg from custom text", req.body.From, req.body.To, req.body.Body)
+      response.message(reply.text);
+    }
   } catch (error) {
     console.error(error);
     response.message(`Failed to reply for ${userMessage}.`);

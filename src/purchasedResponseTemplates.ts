@@ -6,11 +6,11 @@
   somewhere in this file and replace the call to the Promptable API with a local call.
 */
 
-const { Configuration, OpenAIApi } = require("openai");
-import GPT3Tokenizer from "gpt3-tokenizer";
-import axios from "axios";
-import { ChatHistory, ChatHistoryStore, Turn } from "./chatHistory";
-import { PromptableApi } from "promptable";
+// const { Configuration, OpenAIApi } = require("openai");
+// import GPT3Tokenizer from "gpt3-tokenizer";
+// import axios from "axios";
+// import { ChatHistory, ChatHistoryStore, Turn } from "./chatHistory";
+// import { PromptableApi } from "promptable";
 
 
 
@@ -29,6 +29,15 @@ type PurchasedSMSMessage = {
   Get or create a chat history for a phone number
 */
 
+export function validateMessageCheck( SMSMessage: string) {
+  //avoid combination of uppercase and lowercase
+
+  if (SMSMessage.toLowerCase() == "purchased"){
+    return  SMSMessage;
+  }else{
+    return "null";
+  }
+}
 
 
 
@@ -36,7 +45,19 @@ export const getPurchaseReply = async (
   message: string,
   phoneNumber: string
 ): Promise<PurchasedSMSMessage> => {
-  message = "This is a test message"
+  if (validateMessageCheck(message) == "null") {
+    
+    return {
+      text: "NO RESPONSE",
+    } as PurchasedSMSMessage;
+  }
+
+  //function to check if user has an active subscription with Strip
+    //check if user has active subscription in stripe database of users who purchased the product
+  message = "Please go to https://sainikhils-five-star-site.webflow.io/software-package"+ 
+  " and copy and paste the password \"ThanksForSubcribing:)\" to access the page. If you have any questions, you can contact us at" +
+  " Please don't respond or text this automated messsage." +
+  " As always, thanks for subscribing with us and hope you have a great day!"
   console.log("Number", phoneNumber, "Message", message.trim());
   // strip whitespace!
   message = message.trim();
